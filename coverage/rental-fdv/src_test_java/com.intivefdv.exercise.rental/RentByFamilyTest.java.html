@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RentByFamilyTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">rental-fdv (Jan 16, 2018 5:34:28 PM)</a> &gt; <a href="../../index.html" class="el_group">rental-fdv</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.intivefdv.exercise.rental</a> &gt; <span class="el_source">RentByFamilyTest.java</span></div><h1>RentByFamilyTest.java</h1><pre class="source lang-java linenums">package com.intivefdv.exercise.rental;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.intivefdv.exercise.rental.price.PriceStrategy;
+import com.intivefdv.exercise.rental.price.PriceStrategyDiscount;
+import com.intivefdv.exercise.rental.price.PriceStrategyNormal;
+import com.intivefdv.exercise.rental.rentable.Bike;
+
+<span class="fc" id="L11">public class RentByFamilyTest {</span>
+
+	@Test
+	public void calcTotalWithDiscount() {
+<span class="fc" id="L15">		Long bikeId1 = 1001L;</span>
+<span class="fc" id="L16">		Long bikeId2 = 1002L;</span>
+<span class="fc" id="L17">		Long bikeId3 = 1003L;</span>
+<span class="fc" id="L18">		Long bikeId4 = 1004L;</span>
+<span class="fc" id="L19">		int hours = 6;</span>
+<span class="fc" id="L20">		RentalByFamily rentByFamily = new RentalByFamily();</span>
+<span class="fc" id="L21">		Rental r1 = createBikeRentalByHours(bikeId1, hours);</span>
+<span class="fc" id="L22">		rentByFamily.addRental(r1);</span>
+<span class="fc" id="L23">		Rental r2 = createBikeRentalByHours(bikeId2, hours);</span>
+<span class="fc" id="L24">		rentByFamily.addRental(r2);</span>
+<span class="fc" id="L25">		Rental r3 = createBikeRentalByHours(bikeId3, hours);</span>
+<span class="fc" id="L26">		rentByFamily.addRental(r3);</span>
+<span class="fc" id="L27">		Rental r4 = createBikeRentalByHours(bikeId4, hours);</span>
+<span class="fc" id="L28">		rentByFamily.addRental(r4);</span>
+<span class="fc" id="L29">		PriceStrategy priceStrategy = new PriceStrategyDiscount(RentalByFamily.DISCOUNT);</span>
+<span class="fc" id="L30">		double total = r1.calcTotal() + r2.calcTotal() + r3.calcTotal() + r4.calcTotal();</span>
+<span class="fc" id="L31">		Assert.assertEquals(priceStrategy.getPrice(total), rentByFamily.calcTotal(), 0);</span>
+<span class="fc" id="L32">	}</span>
+	
+	@Test
+	public void calcTotalWithoutDiscount() {
+<span class="fc" id="L36">		Long bikeId1 = 1001L;</span>
+<span class="fc" id="L37">		Long bikeId2 = 1002L;</span>
+<span class="fc" id="L38">		int hours = 6;</span>
+<span class="fc" id="L39">		RentalByFamily rentByFamily = new RentalByFamily();</span>
+<span class="fc" id="L40">		Rental r1 = createBikeRentalByHours(bikeId1, hours);</span>
+<span class="fc" id="L41">		rentByFamily.addRental(r1);</span>
+<span class="fc" id="L42">		Rental r2 = createBikeRentalByHours(bikeId2, hours);</span>
+<span class="fc" id="L43">		rentByFamily.addRental(r2);</span>
+<span class="fc" id="L44">		double total = r1.calcTotal() + r2.calcTotal();</span>
+<span class="fc" id="L45">		PriceStrategy priceStrategy = new PriceStrategyNormal();</span>
+<span class="fc" id="L46">		Assert.assertEquals(priceStrategy.getPrice(total), rentByFamily.calcTotal(), 0);</span>
+<span class="fc" id="L47">	}</span>
+	
+	@Test
+	public void calcTotalWithMultipleRents() {
+<span class="fc" id="L51">		Long bikeId1 = 1001L;</span>
+<span class="fc" id="L52">		Long bikeId2 = 1002L;</span>
+<span class="fc" id="L53">		Long bikeId3 = 1003L;</span>
+<span class="fc" id="L54">		Long bikeId4 = 1004L;</span>
+<span class="fc" id="L55">		int hours = 6;</span>
+<span class="fc" id="L56">		int days = 4;</span>
+<span class="fc" id="L57">		int weeks = 1;</span>
+<span class="fc" id="L58">		RentalByFamily rentByFamily = new RentalByFamily();</span>
+<span class="fc" id="L59">		Rental r1 = createBikeRentalByHours(bikeId1, hours);</span>
+<span class="fc" id="L60">		rentByFamily.addRental(r1);</span>
+<span class="fc" id="L61">		Rental r2 = createBikeRentalByDays(bikeId2, days);</span>
+<span class="fc" id="L62">		rentByFamily.addRental(r2);</span>
+<span class="fc" id="L63">		Rental r3 = createBikeRentalByWeeks(bikeId3, weeks);</span>
+<span class="fc" id="L64">		rentByFamily.addRental(r3);</span>
+<span class="fc" id="L65">		Rental r4 = createBikeRentalByWeeks(bikeId4, weeks);</span>
+<span class="fc" id="L66">		rentByFamily.addRental(r4);</span>
+<span class="fc" id="L67">		double total = r1.calcTotal() + r2.calcTotal() + r3.calcTotal() + r4.calcTotal();</span>
+<span class="fc" id="L68">		PriceStrategy priceStrategy = new PriceStrategyDiscount(RentalByFamily.DISCOUNT);</span>
+<span class="fc" id="L69">		Assert.assertEquals(priceStrategy.getPrice(total), rentByFamily.calcTotal(), 0);</span>
+<span class="fc" id="L70">	}</span>
+	
+	private Rental createBikeRentalByHours(Long bikeId, int hours) {
+<span class="fc" id="L73">		Bike bike = new Bike();</span>
+<span class="fc" id="L74">		bike.setBikeId(bikeId);</span>
+<span class="fc" id="L75">		return new RentalByHour(hours, bike);</span>
+	}
+	
+	private Rental createBikeRentalByDays(Long bikeId, int days) {
+<span class="fc" id="L79">		Bike bike = new Bike();</span>
+<span class="fc" id="L80">		bike.setBikeId(bikeId);</span>
+<span class="fc" id="L81">		return new RentalByDay(days, bike);</span>
+	}
+	
+	private Rental createBikeRentalByWeeks(Long bikeId, int weeks) {
+<span class="fc" id="L85">		Bike bike = new Bike();</span>
+<span class="fc" id="L86">		bike.setBikeId(bikeId);</span>
+<span class="fc" id="L87">		return new RentalByWeek(weeks, bike);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>rental-fdv (Jan 16, 2018 5:34:28 PM)</div></body></html>
